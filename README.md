@@ -1,7 +1,7 @@
 # go-conduit
 
 [Phabricator](http://phabricator.org/) is "an open source, software engineering
-platform".  It provides an API to interacting with the system.
+platform".  It provides a JSON API for interacting with the system.
 
 This repository provides a bare bones SDK for interacting with the Phabricator
 conduit API in go.
@@ -11,7 +11,7 @@ conduit API in go.
 This SDK is not production ready and is missing a TON of functionality.  It was
 originally developed to support one particular use case I had [at my day
 job](https://researchsquare.com).  As such, a full implementation of the
-conduit API has not be completed at this time.
+conduit API has not been completed at this time.
 
 If there are new endpoints you want to support, or current ones you want to
 extend, I would welcome any pull requests you want to send my way.
