@@ -4,7 +4,6 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -19,10 +18,6 @@ type Connection struct {
 	SessionKey   string `json:"sessionKey"`
 	ConnectionID int    `json:"connectionID"`
 	Host         string
-}
-
-type connectionResult struct {
-	Result Connection `json:"result"`
 }
 
 type App struct {
@@ -49,10 +44,12 @@ func (a *App) Connect(cert string) Connection {
 	v.Set("__conduit__", "true")
 
 	resp, _ := http.PostForm(a.Host+"/api/conduit.connect", v)
-	body, _ := ioutil.ReadAll(resp.Body)
 
-	var result connectionResult
-	json.Unmarshal(body, &result)
+	result := struct {
+		Result Connection `json:"result"`
+	}{}
+
+	json.NewDecoder(resp.Body).Decode(&result)
 
 	connection := result.Result
 	connection.Host = a.Host

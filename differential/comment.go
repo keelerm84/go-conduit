@@ -2,16 +2,11 @@ package differential
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 
 	"github.com/keelerm84/go-conduit/conduit"
 )
-
-type commentsResult struct {
-	Results map[string][]Comment `json:"result"`
-}
 
 type CommentsQuery struct {
 	Conduit conduit.Connection `json:"__conduit__"`
@@ -33,10 +28,12 @@ func (q *CommentsQuery) Search() map[string][]Comment {
 	v.Set("output", "json")
 
 	resp, _ := http.PostForm(q.Conduit.Host+"/api/differential.getrevisioncomments", v)
-	body, _ := ioutil.ReadAll(resp.Body)
 
-	var result commentsResult
-	json.Unmarshal(body, &result)
+	result := struct {
+		Results map[string][]Comment `json:"result"`
+	}{}
+
+	json.NewDecoder(resp.Body).Decode(&result)
 
 	return result.Results
 }

@@ -2,16 +2,11 @@ package differential
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 
 	"github.com/keelerm84/go-conduit/conduit"
 )
-
-type revisionResult struct {
-	Results []Revision `json:"result"`
-}
 
 type Revision struct {
 	Id        string   `json:"id"`
@@ -36,10 +31,12 @@ func (q *RevisionQuery) Search() []Revision {
 	v.Set("output", "json")
 
 	resp, _ := http.PostForm(q.Conduit.Host+"/api/differential.query", v)
-	body, _ := ioutil.ReadAll(resp.Body)
 
-	var result revisionResult
-	json.Unmarshal(body, &result)
+	result := struct {
+		Results []Revision `json:"result"`
+	}{}
+
+	json.NewDecoder(resp.Body).Decode(&result)
 
 	return result.Results
 }

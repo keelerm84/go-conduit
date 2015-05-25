@@ -2,16 +2,11 @@ package differential
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 
 	"github.com/keelerm84/go-conduit/conduit"
 )
-
-type diffResult struct {
-	Results map[string]Diff `json:"result"`
-}
 
 type Diff struct {
 	DateCreated string `json:dateCreated`
@@ -30,10 +25,12 @@ func (q *DiffQuery) Search() map[string]Diff {
 	v.Set("output", "json")
 
 	resp, _ := http.PostForm(q.Conduit.Host+"/api/differential.querydiffs", v)
-	body, _ := ioutil.ReadAll(resp.Body)
 
-	var result diffResult
-	json.Unmarshal(body, &result)
+	result := struct {
+		Results map[string]Diff `json:"result"`
+	}{}
+
+	json.NewDecoder(resp.Body).Decode(&result)
 
 	return result.Results
 }
