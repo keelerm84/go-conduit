@@ -10,16 +10,16 @@ import (
 	"time"
 )
 
-type ConduitData struct {
-	Conduit Connection `json:"__conduit__"`
-}
-
+// Connection contains the connection id and the session key required to make
+// subsequent calls to the Phabricator API once an app has been authorized.
 type Connection struct {
 	SessionKey   string `json:"sessionKey"`
 	ConnectionID int    `json:"connectionID"`
 	Host         string
 }
 
+// App is the representation of the application that will interact with the
+// Phabricator conduit API.
 type App struct {
 	Client            string `json:"client"`
 	ClientVersion     int    `json:"clientVersion"`
@@ -30,6 +30,8 @@ type App struct {
 	AuthSignature     string `json:"authSignature"`
 }
 
+// Connect authenticates an App against the Phabricator API, returning a
+// Connection struct that must be used on subsequent API requests.
 func (a *App) Connect(cert string) Connection {
 	token, signature := a.generateTokenAndSignature(cert)
 

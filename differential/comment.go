@@ -8,18 +8,24 @@ import (
 	"github.com/keelerm84/go-conduit/conduit"
 )
 
+// CommentsQuery contains various supported fields by which a user might want
+// to search.
 type CommentsQuery struct {
 	Conduit conduit.Connection `json:"__conduit__"`
-	Ids     []string           `json:"ids"`
+	IDs     []string           `json:"ids"`
 }
 
+// Comment defines what a Phabricator comment looks like, including when it was
+// created and what action the owner took to generate it.
 type Comment struct {
-	Id          string `json:"id"`
+	ID          string `json:"id"`
 	DateCreated string `json:"dateCreated"`
 	Action      string `json:"action"`
 	Content     string `json:"content"`
 }
 
+// Search queries the API for comments using the criteria provided in the
+// CommentsQuery struct.
 func (q *CommentsQuery) Search() map[string][]Comment {
 	searchParams, _ := json.Marshal(q)
 
