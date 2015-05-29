@@ -6,6 +6,13 @@ platform".  It provides a JSON API for interacting with the system.
 This repository provides a bare bones SDK for interacting with the Phabricator
 conduit API in go.
 
+## Build
+
+Building an installing this package is as easy as
+
+    go build ./...
+    go install ./...
+
 ## Disclaimer
 
 This SDK is not production ready and is missing a TON of functionality.  It was
