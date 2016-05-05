@@ -21,6 +21,7 @@ type Comment struct {
 	ID          string `json:"id"`
 	DateCreated string `json:"dateCreated"`
 	Action      string `json:"action"`
+	Author      string `json:"authorPHID"`
 	Content     string `json:"content"`
 }
 
